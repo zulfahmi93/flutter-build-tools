@@ -28,7 +28,14 @@ class MacOSBuildRunner extends BuildRunner {
   bool get includeBuildVersion => true;
 
   @override
-  String get outputFilePath =>
+  String get outputDirectoryPath =>
       'build/macos/Build/Products/${config.buildType.outputName}/'
-      '${config.appName}.app';
+      '${config.appName}.app/';
+
+  // ------------------------------- METHODS ------------------------------
+  @override
+  String getOutputName(BuildConfig config) {
+    final name = super.getOutputName(config);
+    return '$name.app';
+  }
 }

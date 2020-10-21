@@ -145,7 +145,7 @@ abstract class BuildRunner {
     final fullPath = path.join(config.projectDirectory, outputFilePath);
     final file = File(fullPath);
     final ext = path.extension(outputFilePath);
-    final outputName = '${_getOutputName(config)}.$ext';
+    final outputName = '${getOutputName(config)}$ext';
     final outputPath = path.join(config.artifactsDirectory, outputName);
 
     await file.copy(outputPath);
@@ -162,7 +162,7 @@ abstract class BuildRunner {
     await for (final file in Directory(fullPath).list(recursive: true)) {
       if (file is File) {
         final fileRelativePath = path.relative(file.path, from: fullPath);
-        final outputFolderName = _getOutputName(config);
+        final outputFolderName = getOutputName(config);
         final newFilePath = path.join(
           config.artifactsDirectory,
           outputFolderName,
@@ -177,7 +177,9 @@ abstract class BuildRunner {
     return 0;
   }
 
-  String _getOutputName(BuildConfig config) {
+  @mustCallSuper
+  @protected
+  String getOutputName(BuildConfig config) {
     var name = config.appName.replaceAll(' ', '-');
     name += '-v${config.buildVersion}b${config.buildNumber}';
     name += '-${config.flavour.outputName}';
