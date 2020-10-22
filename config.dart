@@ -12,6 +12,7 @@ class BuildConfig {
     this.buildVersion,
     this.buildNumber,
     this.verbose,
+    this.cleanBeforeBuild,
     this.webBuildConfig,
   });
 
@@ -25,12 +26,14 @@ class BuildConfig {
   final String buildVersion;
   final int buildNumber;
   final bool verbose;
+  final bool cleanBeforeBuild;
   final WebBuildConfig webBuildConfig;
 
   // ------------------------------- METHODS ------------------------------
   BuildConfig copyWith({
     final BuildType buildType,
     final BuildFlavour flavour,
+    final bool cleanBeforeBuild,
   }) {
     return BuildConfig(
       toolsLocation: toolsLocation,
@@ -42,6 +45,7 @@ class BuildConfig {
       buildVersion: buildVersion,
       buildNumber: buildNumber,
       verbose: verbose,
+      cleanBeforeBuild: cleanBeforeBuild,
       webBuildConfig: webBuildConfig,
     );
   }

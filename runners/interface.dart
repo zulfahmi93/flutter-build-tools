@@ -46,6 +46,33 @@ abstract class BuildRunner {
 
   @mustCallSuper
   @protected
+  List<String> get cleanArguments {
+    final arguments = <String>[];
+    arguments.add('clean');
+
+    if (config.verbose == true) {
+      arguments.add('--verbose');
+    }
+
+    return arguments;
+  }
+
+  @mustCallSuper
+  @protected
+  List<String> get getPackagesArguments {
+    final arguments = <String>[];
+    arguments.add('pub');
+    arguments.add('get');
+
+    if (config.verbose == true) {
+      arguments.add('--verbose');
+    }
+
+    return arguments;
+  }
+
+  @mustCallSuper
+  @protected
   List<String> get buildArguments {
     final arguments = <String>[];
     arguments.add('build');
@@ -84,7 +111,39 @@ abstract class BuildRunner {
 
     int exitCode = 0;
 
-    // 1: PRE-BUILD
+    // 1: CLEAN
+    if (config.cleanBeforeBuild) {
+      try {
+        final result = await clean();
+        exitCode = result.exitCode;
+        if (exitCode != 0) {
+          stderr.writeln('FAILED: Clean action for $platformNameForHuman.');
+          stderr.writeln(result.toolsErrorOutput);
+          return exitCode;
+        }
+      } catch (e) {
+        stderr.writeln('FAILED: Clean action for $platformNameForHuman.');
+        return ExitCodes.buildRunnerCleanFailed;
+      }
+    }
+
+    // 3: GET PACKAGES
+    if (config.cleanBeforeBuild) {
+      try {
+        final result = await getPackages();
+        exitCode = result.exitCode;
+        if (exitCode != 0) {
+          stderr.writeln('FAILED: Get-Packages action for $platformNameForHuman.');
+          stderr.writeln(result.toolsErrorOutput);
+          return exitCode;
+        }
+      } catch (e) {
+        stderr.writeln('FAILED: Get-Packages action for $platformNameForHuman.');
+        return ExitCodes.buildRunnerGetPackagesFailed;
+      }
+    }
+
+    // 3: PRE-BUILD
     try {
       exitCode = await preBuild();
       if (exitCode != 0) {
@@ -96,7 +155,7 @@ abstract class BuildRunner {
       return ExitCodes.buildRunnerPreBuildFailed;
     }
 
-    // 2: BUILD
+    // 4: BUILD
     try {
       final result = await build();
       exitCode = result.exitCode;
@@ -110,7 +169,7 @@ abstract class BuildRunner {
       return ExitCodes.buildRunnerBuildFailed;
     }
 
-    // 3: COPY OUTPUT FILE
+    // 5: COPY OUTPUT FILE
     try {
       exitCode = await copyOutputFile();
       if (exitCode != 0) {
@@ -122,7 +181,7 @@ abstract class BuildRunner {
       return ExitCodes.buildRunnerCopyOutputFileFailed;
     }
 
-    // 4: COPY OUTPUT FOLDER
+    // 6: COPY OUTPUT FOLDER
     try {
       exitCode = await copyOutputDirectory();
       if (exitCode != 0) {
@@ -135,6 +194,44 @@ abstract class BuildRunner {
     }
 
     return exitCode;
+  }
+
+  @mustCallSuper
+  @protected
+  Future<BuildResult> clean() async {
+    print('$platformNameForHuman: Running Clean action.');
+
+    final result = await Process.run(
+      toolsLocation,
+      cleanArguments,
+      workingDirectory: config.projectDirectory,
+    );
+
+    final exitCode = result.exitCode;
+    if (exitCode != 0) {
+      return BuildResult(exitCode: exitCode, toolsErrorOutput: result.stderr);
+    }
+
+    return BuildResult(exitCode: exitCode);
+  }
+
+  @mustCallSuper
+  @protected
+  Future<BuildResult> getPackages() async {
+    print('$platformNameForHuman: Running Get-Packages action.');
+
+    final result = await Process.run(
+      toolsLocation,
+      getPackagesArguments,
+      workingDirectory: config.projectDirectory,
+    );
+
+    final exitCode = result.exitCode;
+    if (exitCode != 0) {
+      return BuildResult(exitCode: exitCode, toolsErrorOutput: result.stderr);
+    }
+
+    return BuildResult(exitCode: exitCode);
   }
 
   @mustCallSuper
