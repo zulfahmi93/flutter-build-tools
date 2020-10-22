@@ -88,25 +88,25 @@ abstract class BuildRunner {
     try {
       exitCode = await preBuild();
       if (exitCode != 0) {
+        stderr.writeln('FAILED: Pre-Build action for $platformNameForHuman.');
         return exitCode;
       }
     } catch (e) {
+      stderr.writeln('FAILED: Pre-Build action for $platformNameForHuman.');
       return ExitCodes.buildRunnerPreBuildFailed;
     }
 
     // 2: BUILD
     try {
-      final result = await Process.run(
-        toolsLocation,
-        buildArguments,
-        workingDirectory: config.projectDirectory,
-      );
-
+      final result = await build();
       exitCode = result.exitCode;
       if (exitCode != 0) {
+        stderr.writeln('FAILED: Build action for $platformNameForHuman.');
+        stderr.writeln(result.toolsErrorOutput);
         return exitCode;
       }
     } catch (e) {
+      stderr.writeln('FAILED: Build action for $platformNameForHuman.');
       return ExitCodes.buildRunnerBuildFailed;
     }
 
@@ -114,9 +114,11 @@ abstract class BuildRunner {
     try {
       exitCode = await copyOutputFile();
       if (exitCode != 0) {
+        stderr.writeln('FAILED: Post-Build action for $platformNameForHuman.');
         return exitCode;
       }
     } catch (e) {
+      stderr.writeln('FAILED: Post-Build action for $platformNameForHuman.');
       return ExitCodes.buildRunnerCopyOutputFileFailed;
     }
 
@@ -124,20 +126,48 @@ abstract class BuildRunner {
     try {
       exitCode = await copyOutputDirectory();
       if (exitCode != 0) {
+        stderr.writeln('FAILED: Post-Build action for $platformNameForHuman.');
         return exitCode;
       }
     } catch (e) {
+      stderr.writeln('FAILED: Post-Build action for $platformNameForHuman.');
       return ExitCodes.buildRunnerCopyOutputDirectoryFailed;
     }
 
     return exitCode;
   }
 
+  @mustCallSuper
   @protected
-  Future<int> preBuild() async => 0;
+  Future<int> preBuild() async {
+    print('$platformNameForHuman: Running Pre-Build action.');
+    return 0;
+  }
 
+  @mustCallSuper
+  @protected
+  Future<BuildResult> build() async {
+    print('$platformNameForHuman: Running Build action.');
+
+    final result = await Process.run(
+      toolsLocation,
+      buildArguments,
+      workingDirectory: config.projectDirectory,
+    );
+
+    final exitCode = result.exitCode;
+    if (exitCode != 0) {
+      return BuildResult(exitCode: exitCode, toolsErrorOutput: result.stderr);
+    }
+
+    return BuildResult(exitCode: exitCode);
+  }
+
+  @mustCallSuper
   @protected
   Future<int> copyOutputFile() async {
+    print('$platformNameForHuman: Running Post-Build action.');
+
     if (outputFilePath == null) {
       return 0;
     }
@@ -152,8 +182,11 @@ abstract class BuildRunner {
     return 0;
   }
 
+  @mustCallSuper
   @protected
   Future<int> copyOutputDirectory() async {
+    print('$platformNameForHuman: Running Post-Build action.');
+
     if (outputDirectoryPath == null) {
       return 0;
     }
@@ -188,4 +221,16 @@ abstract class BuildRunner {
 
     return name;
   }
+}
+
+class BuildResult {
+  // ---------------------------- CONSTRUCTORS ----------------------------
+  const BuildResult({
+    this.toolsErrorOutput,
+    this.exitCode,
+  });
+
+  // ------------------------------- FIELDS -------------------------------
+  final dynamic toolsErrorOutput;
+  final int exitCode;
 }

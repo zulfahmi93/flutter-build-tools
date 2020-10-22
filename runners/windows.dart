@@ -38,6 +38,7 @@ class WindowsBuildRunner extends BuildRunner {
   // ------------------------------- METHODS ------------------------------
   @override
   Future<int> preBuild() async {
+    await super.preBuild();
     await _configureWindowsRunnerRcFile(config);
     return 0;
   }
