@@ -1,4 +1,5 @@
 enum BuildType {
+  unknown,
   debug,
   profile,
   release,

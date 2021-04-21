@@ -3,17 +3,16 @@ import 'constants/constants.dart';
 class BuildConfig {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const BuildConfig({
-    this.toolsLocation,
-    this.projectDirectory,
-    this.artifactsDirectory,
-    this.appName,
-    this.buildType,
-    this.flavour,
-    this.buildVersion,
-    this.buildNumber,
-    this.verbose,
-    this.cleanBeforeBuild,
-    this.webBuildConfig,
+    required this.toolsLocation,
+    required this.projectDirectory,
+    required this.artifactsDirectory,
+    required this.appName,
+    required this.buildVersion,
+    required this.buildNumber,
+    this.buildType = BuildType.unknown,
+    this.flavour = BuildFlavour.unknown,
+    this.verbose = false,
+    this.cleanBeforeBuild = true,
   });
 
   // ------------------------------- FIELDS -------------------------------
@@ -21,19 +20,18 @@ class BuildConfig {
   final String projectDirectory;
   final String artifactsDirectory;
   final String appName;
+  final String buildVersion;
   final BuildType buildType;
   final BuildFlavour flavour;
-  final String buildVersion;
   final int buildNumber;
   final bool verbose;
   final bool cleanBeforeBuild;
-  final WebBuildConfig webBuildConfig;
 
   // ------------------------------- METHODS ------------------------------
   BuildConfig copyWith({
-    final BuildType buildType,
-    final BuildFlavour flavour,
-    final bool cleanBeforeBuild,
+    required BuildType buildType,
+    required BuildFlavour flavour,
+    required bool cleanBeforeBuild,
   }) {
     return BuildConfig(
       toolsLocation: toolsLocation,
@@ -46,19 +44,6 @@ class BuildConfig {
       buildNumber: buildNumber,
       verbose: verbose,
       cleanBeforeBuild: cleanBeforeBuild,
-      webBuildConfig: webBuildConfig,
     );
   }
-}
-
-class WebBuildConfig {
-  // ---------------------------- CONSTRUCTORS ----------------------------
-  const WebBuildConfig({
-    this.useSkia,
-    this.useCanvasText,
-  });
-
-  // ------------------------------- FIELDS -------------------------------
-  final bool useSkia;
-  final bool useCanvasText;
 }

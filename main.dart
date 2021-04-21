@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:args/args.dart';
 import 'package:tuple/tuple.dart';
 
@@ -27,10 +29,6 @@ Future<int> main(List<String> arguments) async {
     buildVersion: result['build-version'],
     buildNumber: int.parse(result['build-number']),
     verbose: result['verbose'],
-    webBuildConfig: WebBuildConfig(
-      useSkia: result['web-use-skia'],
-      useCanvasText: result['web-use-canvas-text'],
-    ),
   );
 
   if (result['apk']) {
@@ -147,12 +145,10 @@ ArgParser _buildParser() {
   parser.addOption('build-version', abbr: 'b');
   parser.addOption('build-number', abbr: 'n');
   parser.addFlag('verbose', abbr: 'v', defaultsTo: false);
-  parser.addFlag('web-use-skia', defaultsTo: true);
-  parser.addFlag('web-use-canvas-text', defaultsTo: true);
   parser.addFlag('apk', defaultsTo: true);
   parser.addFlag('aab', defaultsTo: true);
-  parser.addFlag('web', defaultsTo: false);
-  parser.addFlag('mac', defaultsTo: false);
-  parser.addFlag('windows', defaultsTo: false);
+  parser.addFlag('web', defaultsTo: true);
+  parser.addFlag('mac', defaultsTo: Platform.isMacOS);
+  parser.addFlag('windows', defaultsTo: Platform.isWindows);
   return parser;
 }

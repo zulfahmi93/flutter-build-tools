@@ -9,7 +9,7 @@ import 'interface.dart';
 class WindowsBuildRunner extends BuildRunner {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const WindowsBuildRunner({
-    BuildConfig config,
+    required BuildConfig config,
   }) : super(config: config);
 
   // ----------------------------- PROPERTIES -----------------------------
@@ -23,7 +23,7 @@ class WindowsBuildRunner extends BuildRunner {
   String get platformNameForOutput => 'Windows';
 
   @override
-  String get toolsChannel => 'dev';
+  String get toolsChannel => 'stable';
 
   @override
   bool get includeBuildNumber => false;
@@ -32,7 +32,7 @@ class WindowsBuildRunner extends BuildRunner {
   bool get includeBuildVersion => false;
 
   @override
-  String get outputDirectoryPath =>
+  String? get outputDirectoryPath =>
       'build/windows/runner/${config.buildType.outputName}/';
 
   // ------------------------------- METHODS ------------------------------

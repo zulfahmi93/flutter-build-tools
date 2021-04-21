@@ -9,7 +9,7 @@ import '../constants/constants.dart';
 abstract class BuildRunner {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const BuildRunner({
-    this.config,
+    required this.config,
   });
 
   // ------------------------------- FIELDS -------------------------------
@@ -35,10 +35,10 @@ abstract class BuildRunner {
   bool get includeBuildNumber;
 
   @protected
-  String get outputFilePath => null;
+  String? get outputFilePath => null;
 
   @protected
-  String get outputDirectoryPath => null;
+  String? get outputDirectoryPath => null;
 
   @protected
   String get toolsLocation =>
@@ -90,14 +90,6 @@ abstract class BuildRunner {
 
     if (includeBuildNumber) {
       arguments.add('--build-number=${config.buildNumber}');
-    }
-
-    if (config.toolsLocation == 'web' && config.webBuildConfig != null) {
-      final w1 = config.webBuildConfig.useSkia.toString();
-      final w2 = config.webBuildConfig.useCanvasText.toString();
-      arguments.add('--dart-define=FLUTTER_WEB_USE_SKIA=$w1');
-      arguments
-          .add('--dart-define=FLUTTER_WEB_USE_EXPERIMENTAL_CANVAS_TEXT=$w2');
     }
 
     return arguments;
@@ -271,7 +263,7 @@ abstract class BuildRunner {
 
     final fullPath = path.join(config.projectDirectory, outputFilePath);
     final file = File(fullPath);
-    final ext = path.extension(outputFilePath);
+    final ext = path.extension(outputFilePath!);
     final outputName = '${getOutputName(config)}$ext';
     final outputPath = path.join(config.artifactsDirectory, outputName);
 
@@ -323,8 +315,8 @@ abstract class BuildRunner {
 class BuildResult {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const BuildResult({
+    required this.exitCode,
     this.toolsErrorOutput,
-    this.exitCode,
   });
 
   // ------------------------------- FIELDS -------------------------------

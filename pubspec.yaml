@@ -1,4 +1,6 @@
 name: build_script
+environment:
+  sdk: '>=2.12.0 <3.0.0'
 dependencies:
   args:
   meta:

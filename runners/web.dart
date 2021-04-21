@@ -4,7 +4,7 @@ import 'interface.dart';
 class WebBuildRunner extends BuildRunner {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const WebBuildRunner({
-    BuildConfig config,
+    required BuildConfig config,
   }) : super(config: config);
 
   // ----------------------------- PROPERTIES -----------------------------
@@ -27,19 +27,5 @@ class WebBuildRunner extends BuildRunner {
   bool get includeBuildVersion => false;
 
   @override
-  String get outputDirectoryPath => 'build/web/';
-
-  @override
-  List<String> get buildArguments {
-    final args = super.buildArguments;
-
-    if (config.webBuildConfig.useSkia) {
-      args.add('--dart-define=FLUTTER_WEB_USE_SKIA=true');
-    }
-    if (config.webBuildConfig.useCanvasText) {
-      args.add('--dart-define=FLUTTER_WEB_USE_EXPERIMENTAL_CANVAS_TEXT=true');
-    }
-
-    return args;
-  }
+  String? get outputDirectoryPath => 'build/web/';
 }

@@ -5,7 +5,7 @@ import 'interface.dart';
 class AndroidAppBundleBuildRunner extends BuildRunner {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const AndroidAppBundleBuildRunner({
-    BuildConfig config,
+    required BuildConfig config,
   }) : super(config: config);
 
   // ----------------------------- PROPERTIES -----------------------------
@@ -28,7 +28,7 @@ class AndroidAppBundleBuildRunner extends BuildRunner {
   bool get includeBuildVersion => true;
 
   @override
-  String get outputFilePath {
+  String? get outputFilePath {
     final buildType = config.buildType.buildCommand;
     return 'build/app/outputs/bundle/${buildType}/app-${buildType}.aab';
   }

@@ -1,4 +1,5 @@
 enum BuildFlavour {
+  unknown,
   development,
   production,
 }

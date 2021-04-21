@@ -5,7 +5,7 @@ import 'interface.dart';
 class MacOSBuildRunner extends BuildRunner {
   // ---------------------------- CONSTRUCTORS ----------------------------
   const MacOSBuildRunner({
-    BuildConfig config,
+    required BuildConfig config,
   }) : super(config: config);
 
   // ----------------------------- PROPERTIES -----------------------------
@@ -19,7 +19,7 @@ class MacOSBuildRunner extends BuildRunner {
   String get platformNameForOutput => 'macOS';
 
   @override
-  String get toolsChannel => 'dev';
+  String get toolsChannel => 'stable';
 
   @override
   bool get includeBuildNumber => true;
@@ -28,7 +28,7 @@ class MacOSBuildRunner extends BuildRunner {
   bool get includeBuildVersion => true;
 
   @override
-  String get outputDirectoryPath =>
+  String? get outputDirectoryPath =>
       'build/macos/Build/Products/${config.buildType.outputName}/'
       '${config.appName}.app/';
 
