@@ -18,13 +18,13 @@ class WebBuildRunner extends BuildRunner {
   String get platformNameForOutput => 'Web';
 
   @override
-  String get toolsChannel => 'beta';
+  String get toolsChannel => 'stable';
 
   @override
-  bool get includeBuildNumber => false;
+  bool get includeBuildNumber => true;
 
   @override
-  bool get includeBuildVersion => false;
+  bool get includeBuildVersion => true;
 
   @override
   String? get outputDirectoryPath => 'build/web/';
