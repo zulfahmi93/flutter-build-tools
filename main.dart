@@ -37,6 +37,9 @@ Future<int> main(List<String> arguments) async {
       (BuildType.debug, BuildFlavour.development, true),
       (BuildType.profile, BuildFlavour.development, false),
       (BuildType.release, BuildFlavour.development, false),
+      (BuildType.debug, BuildFlavour.staging, false),
+      (BuildType.profile, BuildFlavour.staging, false),
+      (BuildType.release, BuildFlavour.staging, false),
       (BuildType.debug, BuildFlavour.production, false),
       (BuildType.profile, BuildFlavour.production, false),
       (BuildType.release, BuildFlavour.production, false),
@@ -77,6 +80,8 @@ Future<int> main(List<String> arguments) async {
     final combinations = <_Combination>[
       (BuildType.profile, BuildFlavour.development, true),
       (BuildType.release, BuildFlavour.development, false),
+      (BuildType.profile, BuildFlavour.staging, false),
+      (BuildType.release, BuildFlavour.staging, false),
       (BuildType.profile, BuildFlavour.production, false),
       (BuildType.release, BuildFlavour.production, false),
     ];
@@ -98,6 +103,8 @@ Future<int> main(List<String> arguments) async {
     final combinations = <_Combination>[
       (BuildType.debug, BuildFlavour.development, true),
       (BuildType.release, BuildFlavour.development, false),
+      (BuildType.debug, BuildFlavour.staging, false),
+      (BuildType.release, BuildFlavour.staging, false),
       (BuildType.debug, BuildFlavour.production, false),
       (BuildType.release, BuildFlavour.production, false),
     ];
@@ -119,6 +126,8 @@ Future<int> main(List<String> arguments) async {
     final combinations = <_Combination>[
       (BuildType.debug, BuildFlavour.development, true),
       (BuildType.release, BuildFlavour.development, false),
+      (BuildType.debug, BuildFlavour.staging, false),
+      (BuildType.release, BuildFlavour.staging, false),
       (BuildType.debug, BuildFlavour.production, false),
       (BuildType.release, BuildFlavour.production, false),
     ];

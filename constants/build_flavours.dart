@@ -1,6 +1,7 @@
 enum BuildFlavour {
   unknown,
   development,
+  staging,
   production,
 }
 
@@ -9,6 +10,8 @@ extension BuildFlavourExtensions on BuildFlavour {
     switch (this) {
       case BuildFlavour.development:
         return 'development';
+      case BuildFlavour.staging:
+        return 'staging';
       case BuildFlavour.production:
         return 'production';
       default:
@@ -20,6 +23,8 @@ extension BuildFlavourExtensions on BuildFlavour {
     switch (this) {
       case BuildFlavour.development:
         return 'Dev';
+      case BuildFlavour.staging:
+        return 'Alpha';
       case BuildFlavour.production:
         return 'Live';
       default:
