@@ -26,10 +26,10 @@ class WindowsBuildRunner extends BuildRunner {
   String get toolsChannel => 'stable';
 
   @override
-  bool get includeBuildNumber => false;
+  bool get includeBuildNumber => true;
 
   @override
-  bool get includeBuildVersion => false;
+  bool get includeBuildVersion => true;
 
   @override
   String? get outputDirectoryPath =>
