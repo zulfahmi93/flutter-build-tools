@@ -1,11 +1,12 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
-import 'package:tuple/tuple.dart';
 
 import 'config.dart';
 import 'constants/constants.dart';
 import 'runners/runners.dart';
+
+typedef _Combination = (BuildType, BuildFlavour, bool);
 
 Future<int> main(List<String> arguments) async {
   final parser = _buildParser();
@@ -32,19 +33,19 @@ Future<int> main(List<String> arguments) async {
   );
 
   if (result['apk']) {
-    final combinations = <Tuple3<BuildType, BuildFlavour, bool>>[
-      Tuple3(BuildType.debug, BuildFlavour.development, true),
-      Tuple3(BuildType.profile, BuildFlavour.development, false),
-      Tuple3(BuildType.release, BuildFlavour.development, false),
-      Tuple3(BuildType.debug, BuildFlavour.production, false),
-      Tuple3(BuildType.profile, BuildFlavour.production, false),
-      Tuple3(BuildType.release, BuildFlavour.production, false),
+    final combinations = <_Combination>[
+      (BuildType.debug, BuildFlavour.development, true),
+      (BuildType.profile, BuildFlavour.development, false),
+      (BuildType.release, BuildFlavour.development, false),
+      (BuildType.debug, BuildFlavour.production, false),
+      (BuildType.profile, BuildFlavour.production, false),
+      (BuildType.release, BuildFlavour.production, false),
     ];
     for (final combination in combinations) {
       final config = userInput.copyWith(
-        buildType: combination.item1,
-        flavour: combination.item2,
-        cleanBeforeBuild: combination.item3,
+        buildType: combination.$1,
+        flavour: combination.$2,
+        cleanBeforeBuild: combination.$3,
       );
       final runner = AndroidApkBuildRunner(config: config);
       final exitCode = await runner.startBuild();
@@ -55,14 +56,14 @@ Future<int> main(List<String> arguments) async {
   }
 
   if (result['aab']) {
-    final combinations = <Tuple3<BuildType, BuildFlavour, bool>>[
-      Tuple3(BuildType.release, BuildFlavour.production, true),
+    final combinations = <_Combination>[
+      (BuildType.release, BuildFlavour.production, true),
     ];
     for (final combination in combinations) {
       final config = userInput.copyWith(
-        buildType: combination.item1,
-        flavour: combination.item2,
-        cleanBeforeBuild: combination.item3,
+        buildType: combination.$1,
+        flavour: combination.$2,
+        cleanBeforeBuild: combination.$3,
       );
       final runner = AndroidAppBundleBuildRunner(config: config);
       final exitCode = await runner.startBuild();
@@ -73,15 +74,17 @@ Future<int> main(List<String> arguments) async {
   }
 
   if (result['web']) {
-    final combinations = <Tuple3<BuildType, BuildFlavour, bool>>[
-      Tuple3(BuildType.release, BuildFlavour.development, true),
-      Tuple3(BuildType.release, BuildFlavour.production, false),
+    final combinations = <_Combination>[
+      (BuildType.profile, BuildFlavour.development, true),
+      (BuildType.release, BuildFlavour.development, false),
+      (BuildType.profile, BuildFlavour.production, false),
+      (BuildType.release, BuildFlavour.production, false),
     ];
     for (final combination in combinations) {
       final config = userInput.copyWith(
-        buildType: combination.item1,
-        flavour: combination.item2,
-        cleanBeforeBuild: combination.item3,
+        buildType: combination.$1,
+        flavour: combination.$2,
+        cleanBeforeBuild: combination.$3,
       );
       final runner = WebBuildRunner(config: config);
       final exitCode = await runner.startBuild();
@@ -92,17 +95,17 @@ Future<int> main(List<String> arguments) async {
   }
 
   if (result['mac']) {
-    final combinations = <Tuple3<BuildType, BuildFlavour, bool>>[
-      Tuple3(BuildType.debug, BuildFlavour.development, true),
-      Tuple3(BuildType.release, BuildFlavour.development, false),
-      Tuple3(BuildType.debug, BuildFlavour.production, false),
-      Tuple3(BuildType.release, BuildFlavour.production, false),
+    final combinations = <_Combination>[
+      (BuildType.debug, BuildFlavour.development, true),
+      (BuildType.release, BuildFlavour.development, false),
+      (BuildType.debug, BuildFlavour.production, false),
+      (BuildType.release, BuildFlavour.production, false),
     ];
     for (final combination in combinations) {
       final config = userInput.copyWith(
-        buildType: combination.item1,
-        flavour: combination.item2,
-        cleanBeforeBuild: combination.item3,
+        buildType: combination.$1,
+        flavour: combination.$2,
+        cleanBeforeBuild: combination.$3,
       );
       final runner = MacOSBuildRunner(config: config);
       final exitCode = await runner.startBuild();
@@ -113,17 +116,17 @@ Future<int> main(List<String> arguments) async {
   }
 
   if (result['windows']) {
-    final combinations = <Tuple3<BuildType, BuildFlavour, bool>>[
-      Tuple3(BuildType.debug, BuildFlavour.development, true),
-      Tuple3(BuildType.release, BuildFlavour.development, false),
-      Tuple3(BuildType.debug, BuildFlavour.production, false),
-      Tuple3(BuildType.release, BuildFlavour.production, false),
+    final combinations = <_Combination>[
+      (BuildType.debug, BuildFlavour.development, true),
+      (BuildType.release, BuildFlavour.development, false),
+      (BuildType.debug, BuildFlavour.production, false),
+      (BuildType.release, BuildFlavour.production, false),
     ];
     for (final combination in combinations) {
       final config = userInput.copyWith(
-        buildType: combination.item1,
-        flavour: combination.item2,
-        cleanBeforeBuild: combination.item3,
+        buildType: combination.$1,
+        flavour: combination.$2,
+        cleanBeforeBuild: combination.$3,
       );
       final runner = WindowsBuildRunner(config: config);
       final exitCode = await runner.startBuild();
